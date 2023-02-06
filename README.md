@@ -2,6 +2,8 @@
 
 The goal of this project, divided into several parts, is to create a simple clone of the original [Airbnb website](https://www.airbnb.com/).
 
+![](./images/hbnb.png)
+
 The final app will be composed of :
 
 - A command interpreter to manipulate data without a visual interface, like in a Shell (perfect for development and debugging)
@@ -12,6 +14,8 @@ The final app will be composed of :
 # I - AirbnB - The console
 
 In this first step, we create a command interpreter to manage your AirBnB objects.
+
+![](./images/0-hbnb_console.png)
 
 ## 1- Features
 
@@ -24,3 +28,35 @@ Bellow are the main features of the AirbnB console :
 - Destroy an object
 
 ## 2- Usage
+
+# II - Airbnb - Web static
+
+Static HTML/CSS template of the Airbnb clone
+
+![](./images/1-hbnb_web_static.png)
+
+# III - Airbnb - MySQL storage
+
+Usage of mySQL as a database engine.
+
+![](./images/2-hbnb_mysql_storage.png)
+
+
+# IV - Airbnb - Web framework - templating
+
+Web server to render the website dynamically by using objects stored in a file or database.
+
+![](./images/3-hbnb_web_framework.png)
+
+# V - Airbnb - RESTful API
+
+A restful Api to manipulate/access objects stored in the database engine.
+
+![](./images/4-hbnb_restful_api.png)
+
+# VI - Airbnb - Web dynamic
+
+Usage of javascript in the frontend make request to the Restful Api.
+
+![](./images/5-hbnb_web_dynamic.png)
+
