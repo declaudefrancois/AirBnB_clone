@@ -26,6 +26,14 @@ class TestBaseModel(TestCase):
         self.assertIsInstance(obj.updated_at, datetime.datetime)
         self.assertTrue(obj.created_at == obj.updated_at)
 
+        obj1 = BaseModel(**obj.to_dict())
+
+        self.assertEqual(obj1.id, obj.id)
+        self.assertIsInstance(obj1.created_at, datetime.datetime)
+        self.assertIsInstance(obj1.updated_at, datetime.datetime)
+        self.assertEqual(obj1.created_at, obj.created_at)
+        self.assertTrue(obj1.created_at < obj1.updated_at)
+
     def test_save(self):
         """
             Should update the field updated_at.
