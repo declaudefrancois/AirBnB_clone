@@ -43,7 +43,7 @@ class BaseModel:
     def __str__(self):
         """
             Returns a human readable, representation
-            a a BaseModel instance.
+            of a BaseModel instance.
         """
         fmt = "[{}] ({}) {}"
         return fmt.format(self.__class__.__name__, self.id,

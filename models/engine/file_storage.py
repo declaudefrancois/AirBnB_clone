@@ -4,6 +4,12 @@
 """
 from json import loads, dumps
 from ..base_model import BaseModel
+from ..user import User
+from ..state import State
+from ..city import City
+from ..place import Place
+from ..amenity import Amenity
+from ..review import Review
 from os import path
 
 
@@ -46,6 +52,7 @@ class FileStorage():
         res = self.__objects.pop(key, False)
         if res is False:
             return False
+        self.save()
 
     def update(self, *args):
         """
@@ -57,6 +64,7 @@ class FileStorage():
                                  the attribute's name and its value.
         """
         setattr(self.__objects[args[0]], args[1], args[2])
+        self.__objects[args[0]].save()
 
     def save(self):
         """
@@ -86,7 +94,9 @@ class FileStorage():
 
                 objs = {}
                 for k, v in dicts.items():
-                    objs[k] = BaseModel(**v)
+                    cls = eval(v["__class__"])
+                    objs[k] = cls(**v)
                 self.__objects = objs
         except Exception as err:
+            print(err)
             pass
