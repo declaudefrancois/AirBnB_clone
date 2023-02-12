@@ -5,6 +5,12 @@
 import cmd
 from models import storage
 from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.place import Place
+from models.amenity import Amenity
+from models.review import Review
 import shlex
 
 
@@ -15,6 +21,12 @@ E_ATTR_MISS = "** attribute name missing **"
 E_VALUE_MISS = "** value missing **"
 CLS_NAMES = [
     "BaseModel",
+    "User",
+    "State",
+    "City",
+    "Place",
+    "Amenity",
+    "Review"
 ]
 
 
@@ -128,7 +140,6 @@ class HBNBCommand(cmd.Cmd):
         if res is False:
             print("** no instance found **")
             return
-        storage.save()
 
     def help_destroy(self):
         """
@@ -200,7 +211,6 @@ class HBNBCommand(cmd.Cmd):
         update_args = args[2:]
         update_args.insert(0, key)
         storage.update(*update_args)
-        storage.save()
 
     def help_update(self):
         """
