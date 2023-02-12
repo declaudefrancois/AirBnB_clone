@@ -38,6 +38,26 @@ class FileStorage():
         key = "{}.{}".format(cls_name, obj_id)
         self.__objects[key] = obj
 
+    def remove(self, key):
+        """
+            Removes in __objects the obj with key key, if found
+            otherwise return false.
+        """
+        res = self.__objects.pop(key, False)
+        if res is False:
+            return False
+
+    def update(self, *args):
+        """
+            Updates one object by its key,
+            setting the attribute value.
+
+            Args:
+                arg (list(str)): Hold in this order, the key,
+                                 the attribute's name and its value.
+        """
+        setattr(self.__objects[args[0]], args[1], args[2])
+
     def save(self):
         """
             Serializes __objects to the JSON file.
