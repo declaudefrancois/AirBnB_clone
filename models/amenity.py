@@ -16,5 +16,5 @@ class Amenity(BaseModel):
         """
             Instanciates a new Amenity.
         """
-        super().__init__(*args, **kwargs)
         self.name = ""
+        super().__init__(*args, **kwargs)
