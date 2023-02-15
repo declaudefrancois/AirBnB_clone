@@ -29,10 +29,18 @@ class FileStorage():
         self.__file_path = file_path
         self.__objects = {}
 
-    def all(self):
+    def all(self, cls_name=None):
         """
-            Returns the dictionary __objects.
+            Returns the dictionary __objects
+            or if cls_name is not None, return
+            only items whose key start with it.
         """
+        if cls_name is not None:
+            items = {}
+            for key in self.__objects.keys():
+                if key.startswith(cls_name):
+                    items[key] = self.__objects[key]
+            return items
         return self.__objects
 
     def new(self, obj):
@@ -53,6 +61,25 @@ class FileStorage():
         if res is False:
             return False
         self.save()
+
+    def view(self, key):
+        """
+            Try to Print the object with key key in __object.
+            Return True if object found, otherwise False.
+
+            Args:
+                key (str): The key of the object to print.
+        """
+        items = self.__objects
+        return items.get(key)
+
+    def count(self, cls_name=None):
+        """
+            Returns the number of object, instance of cls_name
+            class in __objects.
+            Return the number of all object if cls_name is None.
+        """
+        return len(self.all(cls_name))
 
     def update(self, *args):
         """
