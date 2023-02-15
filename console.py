@@ -234,14 +234,17 @@ class HBNBCommand(cmd.Cmd):
         """Default command (e.g: when the user press enter
            without writing a command)
         """
-        # print(line)
-        if line.strip() == "User.all()":
-            self.do_all("User")
-            return
-        if line.strip() == "User.count()":
-            print(storage.count("User"))
-            return
         try:
+            regexp = r"(?P<cls>\w+)\.(?P<action>\w+)\(\)"
+            m = re.match(regexp, line)
+            if m is not None:
+                g_dict = m.groupdict()
+                action = g_dict["action"]
+                if action == "count":
+                    return print(storage.count("User"))
+                method = getattr(self, 'do_' + action)
+                return method("{}".format(g_dict["cls"]))
+
             regexp = r"(?P<cls>\w+)\.(?P<action>\w+)\((?P<id>.*)\)"
             m = re.match(regexp, line)
             g_dict = m.groupdict()
@@ -249,20 +252,12 @@ class HBNBCommand(cmd.Cmd):
                 action = g_dict["action"]
                 cls = g_dict["cls"]
                 _id = g_dict["id"]
-                # call = ('self.do_' + '{}('.format(action) +
-                #      '{} {})'.format(cls, _id))
-                # print(call)
-                # eval('self.do_' +
-                #      '{}('.format(action) +
-                #      '{} {})'.format(cls, _id))
-                if action == "show":
-                    return self.do_show('{} {}'.format(cls, _id))
-                if action == "destroy":
-                    return self.do_destroy('{} {}'.format(cls, _id))
+                method = getattr(self, 'do_' + action)
                 if action == "update":
                     args = _id.split(",")
                     args = " ".join(args)
                     return self.do_update('{} {}'.format(cls, args))
+                method("{} {}".format(cls, _id))
         except Exception as e:
             print(e)
             pass
