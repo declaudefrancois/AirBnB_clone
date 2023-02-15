@@ -12,6 +12,7 @@ from models.place import Place
 from models.amenity import Amenity
 from models.review import Review
 import shlex
+import re
 
 
 E_CLASS_MISS = "** class name missing **"
@@ -97,13 +98,11 @@ class HBNBCommand(cmd.Cmd):
             return
 
         key = "{}.{}".format(args[0], args[1])
-        items = storage.all()
-        if len(items) > 0 and key in items:
-            item = items[key]
-            if (item):
-                print(item)
-                return
-        print("** no instance found **")
+        res = storage.view(key)
+        if res is None:
+            print("** no instance found **")
+        else:
+            print(res)
 
     def help_show(self):
         """
@@ -155,19 +154,18 @@ class HBNBCommand(cmd.Cmd):
             Prints all string representation of all instances
             based or not on the class name.
         """
-        items = storage.all()
-        items = [items[k].to_dict() for k in items.keys()]
-        if len(line.strip().split()) > 0:
-            cls_name = line.strip().split()[0]
-            if cls_name not in CLS_NAMES:
-                print(E_CLASS_NFOUND)
-                return
-            items = filter(lambda v:
-                           v["__class__"]
-                           == cls_name, items)
-            items = list(items)
-
-        items = ["{}".format(item) for item in items]
+        rules = [
+            E_CLASS_NFOUND,
+        ]
+        args = self._validate_line(line, rules)
+        if args is False:
+            return
+        cls_name = args[0] if len(args) > 0 else None
+        if cls_name is not None and cls_name not in CLS_NAMES:
+            print(E_CLASS_NFOUND)
+            return
+        items = storage.all(cls_name)
+        items = ["{}".format(item.to_dict()) for item in items.values()]
         print(items)
 
     def help_all(self):
@@ -236,6 +234,38 @@ class HBNBCommand(cmd.Cmd):
         """Default command (e.g: when the user press enter
            without writing a command)
         """
+        # print(line)
+        if line.strip() == "User.all()":
+            self.do_all("User")
+            return
+        if line.strip() == "User.count()":
+            print(storage.count("User"))
+            return
+        try:
+            regexp = r"(?P<cls>\w+)\.(?P<action>\w+)\((?P<id>.*)\)"
+            m = re.match(regexp, line)
+            g_dict = m.groupdict()
+            if g_dict is not None:
+                action = g_dict["action"]
+                cls = g_dict["cls"]
+                _id = g_dict["id"]
+                # call = ('self.do_' + '{}('.format(action) +
+                #      '{} {})'.format(cls, _id))
+                # print(call)
+                # eval('self.do_' +
+                #      '{}('.format(action) +
+                #      '{} {})'.format(cls, _id))
+                if action == "show":
+                    return self.do_show('{} {}'.format(cls, _id))
+                if action == "destroy":
+                    return self.do_destroy('{} {}'.format(cls, _id))
+                if action == "update":
+                    args = _id.split(",")
+                    args = " ".join(args)
+                    return self.do_update('{} {}'.format(cls, args))
+        except Exception as e:
+            print(e)
+            pass
         pass
 
     def do_help(self, line):
@@ -260,7 +290,7 @@ class HBNBCommand(cmd.Cmd):
         if l_args == 0 and E_CLASS_MISS in constraints:
             print(E_CLASS_MISS)
             return False
-        if args[0] not in CLS_NAMES:
+        if l_args > 0 and args[0] not in CLS_NAMES:
             print(E_CLASS_NFOUND)
             return False
         if l_args == 1 and E_ID_MISS in constraints:

@@ -16,5 +16,5 @@ class State(BaseModel):
         """
             Instanciates a new State.
         """
-        super().__init__(*args, **kwargs)
         self.name = ""
+        super().__init__(*args, **kwargs)

@@ -17,6 +17,6 @@ class City(BaseModel):
         """
             Instanciates a new City.
         """
-        super().__init__(*args, **kwargs)
         self.name = ""
         self.state_id = ""
+        super().__init__(*args, **kwargs)

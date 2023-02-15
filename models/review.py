@@ -19,7 +19,7 @@ class Review(BaseModel):
         """
             Instanciates a new User.
         """
-        super().__init__(*args, **kwargs)
         self.place_id = ""
         self.user_id = ""
         self.text = ""
+        super().__init__(*args, **kwargs)

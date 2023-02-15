@@ -3,7 +3,7 @@
     Defines the tests for The FileStorage
     storage engine class.
 """
-from models import FileStorage
+from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
 from unittest import TestCase
 from os import path, remove
