@@ -8,8 +8,7 @@ on:    # yamllint disable-line rule:truthy
 
     push:
         branches:
-            - dev
-            - main
+            - "!main"
 jobs:
     build:
         runs-on: Ubuntu-20.04
