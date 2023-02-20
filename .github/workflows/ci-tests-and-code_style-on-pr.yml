@@ -32,3 +32,6 @@ jobs:
               run: |
                 pycodestyle *.py **/*.py  **/**/*.py
                 python3 -m unittest discover tests -v
+
+            - name: W3C validation.
+              run: bin/w3c_validator.py web_static/!(4*).html web_static/styles/*.css
